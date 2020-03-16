@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.IUserDao">
+    <sql id="defaultUser">
+        select * from user
+    </sql>
+    <select id="findAll" resultType="domain.User">
+        <include refid="defaultUser"></include>
+    </select>
+
+    <select id="findById" parameterType="INT" resultType="domain.User">
+        select * from user where id=#{id};
+    </select>
+
+    <select id="findByName" parameterType="string" resultType="domain.User">
+        select * from user where username like #{username};
+    </select>
+
+    <select id="findUserByVo" parameterType="domain.QueryVo" resultType="domain.User">
+        select * from user where username like #{user.username};
+    </select>
+
+    <!--<select id="findUserByCondition" resultType="domain.User" parameterType="domain.User">-->
+    <!--select * from user where 1=1-->
+    <!--<if test="username!=null">-->
+        <!--and username=#{username}-->
+    <!--</if>-->
+    <!--<if test="sex!=null">-->
+        <!--and sex=#{sex}-->
+    <!--</if>-->
+<!--</select>-->
+
+<select id="findUserByCondition" resultType="domain.User" parameterType="domain.User">
+    select * from user
+    <where>
+        <if test="username!=null">
+            and username=#{username}
+        </if>
+        <if test="sex!=null">
+            and sex=#{sex}
+        </if>
+    </where>
+</select>
+
+<select id="findUserInIds" resultType="domain.User" parameterType="queryvo">
+    <include refid="defaultUser"></include>
+    <where>
+        <if test="ids!=null and ids.size()>0">
+            <foreach collection="ids" open="and id in (" close=")" item="id" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </where>
+</select>
+
+</mapper>
