@@ -16,7 +16,7 @@
 
         <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
             <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
-            <property name="jdbcUrl" value="jdbc:mysql:///address"></property>
+            <property name="jdbcUrl" value="jdbc:mysql:///address?serverTimezone=UTC"></property>
             <property name="user" value="xiaoliu"></property>
             <property name="password" value="960614abcd"></property>
         </bean>

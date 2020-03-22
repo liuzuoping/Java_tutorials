@@ -47,7 +47,7 @@ public class AccountServiceTest {
 
     @Test
     public void testUpdate() {
-        Account account=as.findAccountById(4);
+        Account account=as.findAccountById(1);
         account.setMoney(23456f);
         as.updateAccount(account);
     }

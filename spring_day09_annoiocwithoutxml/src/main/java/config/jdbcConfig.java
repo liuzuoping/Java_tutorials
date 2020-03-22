@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Scope;
 import javax.sql.DataSource;
 @Configuration
 public class jdbcConfig {
-    @Value("${jdbc.driver")
+    @Value("${jdbc.driver}")
     private String driver;
-    @Value("${jdbc.url")
+    @Value("${jdbc.url}")
     private String url;
-    @Value("${jdbc.username")
+    @Value("${jdbc.username}")
     private String username;
-    @Value("${jdbc.password")
+    @Value("${jdbc.password}")
     private String password;
     @Bean(name = "runner")
     @Scope("prototype")

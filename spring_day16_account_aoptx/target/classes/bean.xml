@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+        <bean id="accountService" class="com.itxiaoliu.service.impl.AccountServiceImpl">
+            <property name="accountDao" ref="accountDao"></property>
+        </bean>
+        <bean id="accountDao" class="com.itxiaoliu.dao.impl.AccountDaoImpl">
+            <property name="runner" ref="runner"></property>
+            <property name="connectionutils" ref="connectionutils"></property>
+        </bean>
+        <bean id="runner" class="org.apache.commons.dbutils.QueryRunner" scope="prototype"></bean>
+
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+            <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+            <property name="jdbcUrl" value="jdbc:mysql:///address?serverTimezone=UTC"></property>
+            <property name="user" value="xiaoliu"></property>
+            <property name="password" value="960614abcd"></property>
+        </bean>
+
+        <bean id="connectionutils" class="com.itxiaoliu.utils.Connectionutils">
+            <property name="dataSource" ref="dataSource"></property>
+        </bean>
+
+        <bean id="txManager" class="com.itxiaoliu.utils.TransactionManager">
+            <property name="connectionutils" ref="connectionutils"></property>
+        </bean>
+
+        <aop:config>
+            <aop:pointcut id="pt1" expression="execution(* com.itxiaoliu.service.impl.*.*(..))"></aop:pointcut>
+            <aop:aspect id="txAdvice" ref="txManager">
+                <aop:before method="beginTransaction" pointcut-ref="pt1"></aop:before>
+                <aop:after-returning method="commit" pointcut-ref="pt1"></aop:after-returning>
+                <aop:after-throwing method="rollback" pointcut-ref="pt1"></aop:after-throwing>
+                <aop:after method="release" pointcut-ref="pt1"></aop:after>
+            </aop:aspect>
+        </aop:config>
+</beans>
